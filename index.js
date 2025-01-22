@@ -11,8 +11,9 @@ const port = process.env.PORT
 //     price: Number,
 //     thumbnail: String
 // })
-
+app.use(express.static('public'))
 route(app)
+
 
 app.set('views', './views')
 app.set('view engine', 'pug')
