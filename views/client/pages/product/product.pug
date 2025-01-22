@@ -1,0 +1,8 @@
+extends ../../../layout/default.pug
+
+block content 
+    h1 Danh sách sản phẩm 
+    ul 
+        each item in products 
+            li #{item.title} 
+               
