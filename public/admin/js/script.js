@@ -20,3 +20,21 @@
     }
 
 // End button-status
+
+
+// Form search
+    const formSearch = document.querySelector("#form-search")
+    if(formSearch){
+        formSearch.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const key = e.target.elements.keyboard.value
+            // console.log(e.target.elements.keyboard.value)
+            if(key){
+                url.searchParams.set("title", key)
+            }else{
+                url.searchParams.delete("title")
+            }
+            window.location.href = url.href
+        })
+    }
+// End form search
