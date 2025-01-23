@@ -10,4 +10,29 @@
 .inner-menu ul {
     display: flex;
     justify-content: space-evenly;
+    list-style-type: none;
+}
+
+.inner-logo{
+    /* display: flex;
+    align-items: center; */
+    padding-top: 10px
+}
+
+.inner-menu ul li{
+    padding: 10px 5px 
+}
+
+.inner-image{
+    text-align: center;
+    margin-right: 5px
+}
+
+.inner-image img{
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    height: 100%;
+    width: auto;
+    overflow: hidden;
+    border: 1px solid #ddd
 }
