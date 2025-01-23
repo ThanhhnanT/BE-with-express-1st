@@ -1,52 +1,31 @@
 const Product = require("../../model/product.model")
+const fliterStatusHelper = require("../../helpers/filterStatus")
+const filterStatus = require("../../helpers/filterStatus")
+const searchHelper = require("../../helpers/search")
 
 module.exports.index = async (req, res) => {
     // console.log(req)
-    let filterStatus =[
-        {
-            name: "Tất cả",
-            status: "",
-            class: ""
-        },
-        {
-            name: "Hoạt động",
-            status: "active",
-            class: ""
-        },
-        {
-            name: "Dừng hoạt động",
-            status: "non-active",
-            class: ""
-        }
-    ]
-    
-    let find ={
+    let find = {
         deleted: false,
     }
-
-    req.query.status ? (find.status = req.query.status) :("")
-
-    if(req.query.status){
-        const index = filterStatus.findIndex(item => item.status==req.query.status)
-        filterStatus[index].class="active"
-    } else {
-        const index = filterStatus.findIndex(item => item.status=="")
-        filterStatus[index].class="active"
-    }
-
-    var keyword = ""
+    console.log(searchHelper)
+    // Bo loc
+    const filterStatus = fliterStatusHelper(req);
+    // console.log(filterStatus)
+    req.query.status ? (find.status = req.query.status) : ("")
+    
+    // search
+    const objectSearch = searchHelper(req);
+    // console.log(objectSearch)
     if(req.query.title){
-        keyword = req.query.title
-        const regex = new RegExp(keyword, "i")
-        find.title = regex
+        find.title = objectSearch.regex
     }
     
     const products = await Product.find(find)
-    console.log(products)
     res.render("admin/pages/product/index.pug", {
         pageTitle: "Admin: Trang sản phẩm",
         product: products,
         filterStatus: filterStatus,
-        keyword: keyword
+        keyword: objectSearch.keyword
     })
 }
