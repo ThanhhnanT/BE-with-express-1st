@@ -1,16 +1,12 @@
 const express = require('express')
-const mongoose = require('mongoose')
-mongoose.connect('mongodb://127.0.0.1:27017/Bai2');
+require('dotenv').config()
 const route = require('./routes/client/index.route')
 const app = express()
-require('dotenv').config()
+const database = require("./config/database")
+database.connect()
+
 const port = process.env.PORT
 
-// const Product = mongoose.model('Product', {
-//     title: String,
-//     price: Number,
-//     thumbnail: String
-// })
 app.use(express.static('public'))
 route(app)
 
@@ -21,5 +17,5 @@ app.set('view engine', 'pug')
 
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`Example app listening on port ${process.env.MONGO_URL}`)
 })

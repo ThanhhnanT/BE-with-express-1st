@@ -1,3 +1,13 @@
-.test{
-    
+.footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #777;
+    color: #fff;
+    padding: 5px 0;
+}
+
+.inner-menu ul {
+    display: flex;
+    justify-content: space-evenly;
 }
