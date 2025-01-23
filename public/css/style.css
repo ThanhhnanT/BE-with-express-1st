@@ -14,9 +14,9 @@
 }
 
 .inner-logo{
-    /* display: flex;
-    align-items: center; */
-    padding-top: 10px
+    padding-top: 10px;
+    width:150px;
+    height: auto
 }
 
 .inner-menu ul li{
