@@ -21,7 +21,7 @@ module.exports.index = async (req, res) => {
     ]
     
     let find ={
-        deleted: false
+        deleted: false,
     }
 
     req.query.status ? (find.status = req.query.status) :("")
@@ -30,14 +30,23 @@ module.exports.index = async (req, res) => {
         const index = filterStatus.findIndex(item => item.status==req.query.status)
         filterStatus[index].class="active"
     } else {
-         const index = filterStatus.findIndex(item => item.status=="")
+        const index = filterStatus.findIndex(item => item.status=="")
         filterStatus[index].class="active"
     }
+
+    var keyword = ""
+    if(req.query.title){
+        keyword = req.query.title
+        const regex = new RegExp(keyword, "i")
+        find.title = regex
+    }
+    
     const products = await Product.find(find)
     console.log(products)
     res.render("admin/pages/product/index.pug", {
         pageTitle: "Admin: Trang sản phẩm",
         product: products,
-        filterStatus: filterStatus
+        filterStatus: filterStatus,
+        keyword: keyword
     })
 }

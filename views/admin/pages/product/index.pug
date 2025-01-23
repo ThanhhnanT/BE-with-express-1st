@@ -18,6 +18,7 @@ block content
                                 placeholder="Nhập từ khóa"
                                 name="keyboard"
                                 class="form-control"
+                                value = keyword
                             )
                             .input-grourp-append 
                                 button(
@@ -49,7 +50,7 @@ block content
                                     width="100px"
                                     height="auto"
                                 )
-                            td Sản phẩm #{index +1}
+                            td #{item.title}
                             td #{item.price} 
                             td 
                                 if(item.status == "active")
