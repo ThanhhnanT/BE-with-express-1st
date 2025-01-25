@@ -11,7 +11,7 @@ block content
                 .col-4.mb-3 
                     .product-item 
                         .inner-image 
-                            img(src=`${item._doc.link}`, alt=item.title)
+                            img(src=`${item.thumbnail}`, alt=item.title)
 
                             h3.inner-title #{item.title}
                             .inner-price-new #{item.priceNew}
@@ -19,3 +19,5 @@ block content
                             .inner-discount -#{item.discountPercentage}%
                             // Thêm dòng này để kiểm tra giá trị thumbnail
                             p vui chơi nhé #{item.link} 
+
+        
