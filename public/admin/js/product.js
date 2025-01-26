@@ -9,7 +9,7 @@
                 const statusCurrent = item.getAttribute("data-status")
                 const id = item.getAttribute("data-id")
                 let statusChange = statusCurrent == "active" ? "non-active" :"active"
-                const action = path + `/${statusChange}/${id}?_method=PATCH`
+                const action = path + `/${statusChange}/${id}`
                 // console.log(action)
                 formChangeStatus.action = action
                 formChangeStatus.submit()
