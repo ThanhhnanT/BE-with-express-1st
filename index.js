@@ -5,6 +5,7 @@ const routeAdmin = require("./routes/admin/index.route")
 const app = express()
 const systemConfig = require("./config/system")
 const database = require("./config/database")
+var methodOverride = require('method-override')
 database.connect()
 
 const port = process.env.PORT
@@ -18,7 +19,7 @@ app.locals.prefixAdmin = systemConfig.prefixAdmin
 routeAdmin(app)
 route(app)
 
-
+app.use(methodOverride('_method'))
 app.set('views', './views')
 app.set('view engine', 'pug')
 
