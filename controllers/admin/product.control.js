@@ -8,7 +8,7 @@ module.exports.index = async (req, res) => {
     let find = {
         deleted: false,
     }
-    console.log(searchHelper)
+    // console.log(searchHelper)
 
     // Bo loc
     const filterStatus = fliterStatusHelper(req);
@@ -34,7 +34,7 @@ module.exports.index = async (req, res) => {
     // console.log(countProduct)
     
     // End Pagination
-    console.log(objectPagination)
+    // console.log(objectPagination)
     const products = await Product.find(find).limit(objectPagination.limitItem).skip(objectPagination.skip)
     res.render("admin/pages/product/index.pug", {
         pageTitle: "Admin: Trang sản phẩm",
@@ -51,5 +51,22 @@ module.exports.changeStatus = async(req,res) => {
     const id = req.params.id
     // console.log(status, id)
     await Product.updateOne({_id:id}, {status: status})
+    res.redirect("back")
+}
+
+// [PATCH] /admin/product/change-multi
+module.exports.changeMulti = async (req, res) => {
+    // console.log(req.query.type)
+    const type = req.query.type
+    const ids = req.query.ids.split(", ");
+    console.log(req.query)
+    switch (type){
+        case "active":
+            await Product.updateMany({_id: {$in: ids}}, {status: "active"});
+            break;
+        case "non-active":
+            await Product.updateMany({_id: {$in: ids}}, {status: "non-active"});
+            break
+    }
     res.redirect("back")
 }

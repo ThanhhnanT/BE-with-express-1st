@@ -4,6 +4,7 @@ const route = require('./routes/client/index.route')
 const routeAdmin = require("./routes/admin/index.route")
 const app = express()
 const systemConfig = require("./config/system")
+const bodyParser = require("body-parser")
 const database = require("./config/database")
 var methodOverride = require('method-override')
 database.connect()
@@ -20,10 +21,9 @@ routeAdmin(app)
 route(app)
 
 app.use(methodOverride('_method'))
+app.use(bodyParser.urlencoded({extended: false}))
 app.set('views', './views')
 app.set('view engine', 'pug')
-
-
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${process.env.MONGO_URL}`)
