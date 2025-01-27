@@ -35,7 +35,7 @@ module.exports.index = async (req, res) => {
     
     // End Pagination
     // console.log(objectPagination)
-    const products = await Product.find(find).limit(objectPagination.limitItem).skip(objectPagination.skip)
+    const products = await Product.find(find).limit(objectPagination.limitItem).skip(objectPagination.skip).sort({position: "desc"})
     res.render("admin/pages/product/index.pug", {
         pageTitle: "Admin: Trang sản phẩm",
         product: products,
@@ -59,7 +59,7 @@ module.exports.changeMulti = async (req, res) => {
     // console.log(req.query.type)
     const type = req.query.type
     const ids = req.query.ids.split(", ");
-    console.log(req.query)
+    // console.log(req.query)
     switch (type){
         case "active":
             await Product.updateMany({_id: {$in: ids}}, {status: "active"});
@@ -69,6 +69,16 @@ module.exports.changeMulti = async (req, res) => {
             break
         case "delete-all":
             await Product.updateMany({_id: {$in: ids}}, {deleted: true, deletedAt: new Date() })
+        case "change-position":
+            // console.log(ids)
+            for (item of ids){
+                let [id, position] = item.split("-");
+                // console.log(position)
+                position = parseInt(position)
+                await Product.updateOne({_id:id}, {
+                    position: position
+                })
+            }
     }
     res.redirect("back")
 }

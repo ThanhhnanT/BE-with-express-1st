@@ -77,7 +77,13 @@ formChangeMulti.addEventListener("submit", (e) => {
     let ids = []
     boxchecked.forEach(item => {
         const id = item.value
-        ids.push(id)
+        if(typeChange =="change-position"){
+            const position = item.closest("tr").querySelector("input[name='position']").value;
+            // console.log(position)
+            ids.push(`${id}-${position}`) 
+        }else{
+            ids.push(id)
+        }
     })
     // console.log(ids.join(", "))
     const inputID = document.querySelector("input[name='ids']")

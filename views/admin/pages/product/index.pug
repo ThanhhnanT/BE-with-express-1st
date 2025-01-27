@@ -32,6 +32,7 @@ block content
                         th Hình ảnh 
                         th Tiêu đề 
                         th Giá 
+                        th Vị trí 
                         th Trạng thái 
                         th Hành động
                 tbody  
@@ -52,7 +53,15 @@ block content
                                     height="auto"
                                 )
                             td #{item.title}
-                            td #{item.price} 
+                            td #{item.price}
+                            td 
+                                input(
+                                    type="number"
+                                    value= item.position 
+                                    style="width: 60px"
+                                    min="1"
+                                    name="position"
+                                ) 
                             td 
                                 if(item.status == "active")
                                     a(href="javascript:;" data-id=item.id data-status = "active" button-change-status class="badge badge-success") Hoạt động
