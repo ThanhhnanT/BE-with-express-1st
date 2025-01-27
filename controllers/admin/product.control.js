@@ -67,6 +67,8 @@ module.exports.changeMulti = async (req, res) => {
         case "non-active":
             await Product.updateMany({_id: {$in: ids}}, {status: "non-active"});
             break
+        case "delete-all":
+            await Product.updateMany({_id: {$in: ids}}, {deleted: true, deletedAt: new Date() })
     }
     res.redirect("back")
 }
@@ -77,6 +79,13 @@ module.exports.delete = async(req, res) => {
     // res.send("OKE")
     // console.log(req.params.id)
     const id = req.params.id
-    await Product.updateOne({_id:id}, {deleted: true})
+    await Product.updateOne(
+        {_id:id}, 
+        {
+            deleted: true,
+            deletedAt: new Date()
+        }
+
+    )
     res.redirect("back")
 }

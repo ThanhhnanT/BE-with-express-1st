@@ -66,6 +66,14 @@ formChangeMulti.addEventListener("submit", (e) => {
     e.preventDefault()
     const boxchecked = document.querySelectorAll("input[name='id']:checked")
     // console.log(boxchecked)
+    const typeChange = e.target.elements.type.value
+    console.log(typeChange)
+    if(typeChange=="delete-all"){
+        const isConfirm = confirm ("Bạn chắc muốn xóa tất cả không?")
+        if (!isConfirm){
+            return;
+        }
+    }
     let ids = []
     boxchecked.forEach(item => {
         const id = item.value
