@@ -8,4 +8,6 @@ router.get("/", controller.index)
 router.get("/change-status/:status/:id", controller.changeStatus)
 
 router.get("/change-multi", controller.changeMulti)
+
+router.get("/delete/:id", controller.delete)
 module.exports = router

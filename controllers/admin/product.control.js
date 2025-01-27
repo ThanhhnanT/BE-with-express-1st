@@ -70,3 +70,13 @@ module.exports.changeMulti = async (req, res) => {
     }
     res.redirect("back")
 }
+
+
+// Delete item
+module.exports.delete = async(req, res) => {
+    // res.send("OKE")
+    // console.log(req.params.id)
+    const id = req.params.id
+    await Product.updateOne({_id:id}, {deleted: true})
+    res.redirect("back")
+}

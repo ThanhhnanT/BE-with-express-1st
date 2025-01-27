@@ -75,14 +75,32 @@ formChangeMulti.addEventListener("submit", (e) => {
     const inputID = document.querySelector("input[name='ids']")
     // console.log(inputID)
     inputID.value = ids.join(", ")
-    // const path = formChangeMulti.getAttribute("path")
-    // const select = formChangeMulti.querySelector("select")
-    // const action = path + `/${select.value}/${ids.join("")}`
-    // // console.log(action)
-    // formChangeMulti.action = action
-    // console.log(action)
     formChangeMulti.submit()
 })
 
 //  End Form change-multi
+
+// Delete Item
+
+    const buttonDelete = document.querySelectorAll("[button-delete]")
+    // console.log(buttonDelete)
+    const formDelete = document.querySelector("#form-delete")
+    if (buttonDelete.length >0){
+        buttonDelete.forEach((item) => {
+            item.addEventListener("click", () => {
+                // console.log(item.getAttribute("data-id"))
+                const isConfirm = confirm("Bạn có chắc muốn xóa không?")
+                if(isConfirm){
+                    const id = item.getAttribute("data-id")
+                    // console.log(id)
+                    const path = formDelete.getAttribute("data-path")
+                    const action = path + `/${id}`
+                    formDelete.action = action
+                    formDelete.submit()
+                }
+            })
+        })
+    }
+
+// End Delete Item
 

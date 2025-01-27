@@ -60,12 +60,18 @@ block content
                                     a(href="javascript:;" data-id=item.id data-status = "non-active" button-change-status class="badge badge-danger") Dừng hoạt động
                             td  
                                 button(class="btn btn-warning btn-sm") Sửa
-                                button(class="btn btn-danger btn-sm ml-1") Xóa 
+                                button(class="btn btn-danger btn-sm ml-1" data-id = item.id button-delete) Xóa 
         +pagination(pagination)
         form(
             action=``
             method="GET"
             id = "form-change-status"
             data-path = `${prefixAdmin}/product/change-status`
+        )
+        form(
+            action=``
+            method="GET"
+            id = "form-delete"
+            data-path = `${prefixAdmin}/product/delete`
         )
     script(src="/admin/js/product.js")
