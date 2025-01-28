@@ -3,6 +3,7 @@ const fliterStatusHelper = require("../../helpers/filterStatus")
 const filterStatus = require("../../helpers/filterStatus")
 const searchHelper = require("../../helpers/search")
 const paginationHelper = require("../../helpers/pagination")
+const systemConfig = require("../../config/system")
 module.exports.index = async (req, res) => {
     // console.log(req)
     let find = {
@@ -99,3 +100,31 @@ module.exports.delete = async(req, res) => {
     )
     res.redirect("back")
 }
+
+module.exports.create = async (req, res) => {
+    res.render("admin/pages/product/create", {
+        pageTitle: "Thêm sản phẩm mới"
+    })
+}
+
+module.exports.createPost = async (req, res) => {
+    // console.log(req.body)
+    req.body.price = parseInt(req.body.price)
+    req.body.discountPercentage = parseInt(req.body.discountPercentage)
+    req.body.stock = parseInt(req.body.stock)
+    if (req.body.position == "") {
+        const count = await Product.countDocuments()
+        console.log(count)
+        req.body.position = count + 1
+    }
+    else{
+        req.body.position = parseInt(req.body.position)
+    }
+    // req.body.deleted = false
+    const product = new Product(req.body)
+    console.log(product)
+    await product.save()
+    // console.log(req.body)
+    res.redirect(`${systemConfig.prefixAdmin}/product`)
+}
+
