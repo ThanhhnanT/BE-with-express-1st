@@ -26,13 +26,14 @@
 .inner-image{
     text-align: center;
     margin-right: 5px
+
 }
 
 .inner-image img{
     aspect-ratio: 4/3;
     object-fit: cover;
-    height: 100%;
-    width: auto;
+    width: 30%;
+    height: auto;
     overflow: hidden;
     border: 1px solid #ddd
 }
