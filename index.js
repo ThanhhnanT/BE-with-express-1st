@@ -1,8 +1,7 @@
 const express = require('express')
 const app = express()
 require('dotenv').config()
-const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
+
 const route = require('./routes/client/index.route')
 const routeAdmin = require("./routes/admin/index.route")
 

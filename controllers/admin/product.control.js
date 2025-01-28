@@ -120,6 +120,8 @@ module.exports.createPost = async (req, res) => {
     else{
         req.body.position = parseInt(req.body.position)
     }
+    // console.log(req.file, req.body)
+    req.body.thumbnail = `/uploads/${req.file.filename}`
     // req.body.deleted = false
     const product = new Product(req.body)
     console.log(product)

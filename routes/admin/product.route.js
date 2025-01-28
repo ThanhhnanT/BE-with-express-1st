@@ -1,7 +1,8 @@
 const express = require("express")
 const multer = require('multer');
 const router = express.Router()
-const upload = multer()
+const storageMulter = require("../../helpers/storageMulter")
+const upload = multer({storage: storageMulter()})
 
 const controller = require("../../controllers/admin/product.control")
 
@@ -14,6 +15,6 @@ router.get("/change-multi", controller.changeMulti)
 router.get("/delete/:id", controller.delete)
 
 router.get("/create", controller.create)
-router.post("/create",upload.none(), controller.createPost)
+router.post("/create",upload.single("thumbnail"), controller.createPost)
 
 module.exports = router
