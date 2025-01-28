@@ -116,7 +116,7 @@ module.exports.edit = async (req, res) => {
                 _id: req.params._id
             }
         )
-        console.log(editProduct)
+        // console.log(editProduct)
         res.render("admin/pages/product/edit", {
             pageTitle: "Chỉnh sửa sản phẩm ",
             item: editProduct
@@ -169,5 +169,24 @@ module.exports.changeEdit = async(req,res) => {
     // console.log(req.params)
     await Product.updateOne({_id: id}, req.body)
     res.redirect(`${systemConfig.prefixAdmin}/product`)
+}
+
+
+// Detail
+module.exports.detail = async (req, res) => {
+    
+        // console.log(req.params)
+        const detailProduct = await Product.findOne(
+            {
+                deleted: false,
+                _id: req.params.id
+            }
+        )
+        // console.log(detailProduct)
+        res.render("admin/pages/product/detail", {
+            pageTitle: "Chi tiết sản phẩm: " + detailProduct.title,
+            item: detailProduct
+        })
+    
 }
 

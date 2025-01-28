@@ -19,4 +19,7 @@ router.post("/create",upload.single("thumbnail"), controller.createPost)
 
 router.get("/edit/:_id", controller.edit)
 router.post("/edit/change/:id",upload.single("thumbnail"), controller.changeEdit)
+
+router.get("/detail/:id", controller.detail)
+
 module.exports = router
