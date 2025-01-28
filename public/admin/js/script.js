@@ -51,7 +51,23 @@ if (buttonPagination)
             window.location.href = url.href
         })
     })
-
 // End pagination
+
+// Preview Image
+
+    const uploadImage = document.querySelector("[upload-image]")
+    // console.log(uploadImage)
+    if(uploadImage){
+        const uploadImageInput = document.querySelector("[upload-image-input]")
+        const uploadImagePreview = document.querySelector("[upload-image-preview]")
+        uploadImage.addEventListener("change", (e) => {
+            const [file] = uploadImageInput.files
+            if(file){
+                uploadImagePreview.src=URL.createObjectURL(file)
+            }
+        })
+    }
+
+// End Preview Image
 
 

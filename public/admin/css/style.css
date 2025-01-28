@@ -22,3 +22,8 @@ a{
     color: #fff;
     font-weight: bold;
 }
+
+.form-group img{
+    width: 200px;
+    height: auto
+}

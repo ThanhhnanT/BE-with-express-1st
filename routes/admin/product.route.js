@@ -17,4 +17,6 @@ router.get("/delete/:id", controller.delete)
 router.get("/create", controller.create)
 router.post("/create",upload.single("thumbnail"), controller.createPost)
 
+router.get("/edit/:_id", controller.edit)
+router.post("/edit/change/:id",upload.single("thumbnail"), controller.changeEdit)
 module.exports = router
