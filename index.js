@@ -16,7 +16,7 @@ database.connect()
 
 const port = process.env.PORT
 
-app.use(express.static('public'))
+app.use(express.static(`${__dirname}/public`))
 
 // App local variable
 app.locals.prefixAdmin = systemConfig.prefixAdmin
@@ -27,7 +27,7 @@ route(app)
 
 app.use(methodOverride('_method'))
 app.use(bodyParser.urlencoded({extended: true}))
-app.set('views', './views')
+app.set('views', `${__dirname}/views`)
 app.set('view engine', 'pug')
 // app.use(cookieParser('KJGFHHFGH'));
 // app.use(session({ cookie: { maxAge: 60000 }}));
