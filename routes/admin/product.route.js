@@ -20,7 +20,7 @@ router.get("/create", controller.create)
 router.post("/create", upload.single("thumbnail"),uploadCould.upload, controller.createPost)
 
 router.get("/edit/:_id", controller.edit)
-router.post("/edit/change/:id", upload.single("thumbnail"), controller.changeEdit)
+router.post("/edit/change/:id", upload.single("thumbnail"),uploadCould.upload, controller.changeEdit)
 
 router.get("/detail/:id", controller.detail)
 

@@ -122,3 +122,29 @@ if (buttonDelete.length > 0) {
 
 // End Delete Item
 
+// Sort
+    const sortButton = document.querySelector("[sort]")
+    // console.log(sortButton)
+    if(sortButton){
+        const sortSelect = sortButton.querySelector("[sort-select")
+        const sortClear = sortButton.querySelector("[sort-clear]")
+        sortSelect.addEventListener("change", (e) => {
+            // console.log(e.target.value)
+            const [sortKey, sortValue] = e.target.value.split("-")
+            // console.log(list)
+            // console.log(url)
+            url.searchParams.set("sortKey", sortKey)
+            url.searchParams.set("sortValue", sortValue)
+            window.location.href = url.href
+        })
+        // Xóa sắp xếp
+        sortClear.addEventListener("click", () => {
+            url.searchParams.delete("sortKey")
+            url.searchParams.delete("sortValue")
+            window.location.href = url.href
+        })
+    }
+
+    
+// End Sort
+

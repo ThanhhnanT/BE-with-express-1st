@@ -33,10 +33,20 @@ module.exports.index = async (req, res) => {
         countProduct
     )
     // console.log(countProduct)
-
     // End Pagination
+
+    // Sort
+    let sort = {}
+    if (req.query.sortKey && req.query.sortValue){
+        sort[req.query.sortKey] = req.query.sortValue
+    } else {
+        sort.position = "desc"
+    }
+    
+    
+    
     // console.log(objectPagination)
-    const products = await Product.find(find).limit(objectPagination.limitItem).skip(objectPagination.skip).sort({ position: "desc" })
+    const products = await Product.find(find).limit(objectPagination.limitItem).skip(objectPagination.skip).sort(sort)
     res.render("admin/pages/product/index.pug", {
         pageTitle: "Admin: Trang sản phẩm",
         product: products,
@@ -46,6 +56,10 @@ module.exports.index = async (req, res) => {
     })
 }
 
+
+
+
+// Change status
 module.exports.changeStatus = async (req, res) => {
     // console.log(req.params)
     const status = req.params.status
