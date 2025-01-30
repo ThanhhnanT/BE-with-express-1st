@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 require('dotenv').config()
-
+const path= require('path')
 const route = require('./routes/client/index.route')
 const routeAdmin = require("./routes/admin/index.route")
 
@@ -29,6 +29,7 @@ app.use(methodOverride('_method'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.set('views', `${__dirname}/views`)
 app.set('view engine', 'pug')
+app.use("/tinymce", express.static(path.join(__dirname, 'node_modules', 'tinymce')))
 // app.use(cookieParser('KJGFHHFGH'));
 // app.use(session({ cookie: { maxAge: 60000 }}));
 // app.use(flash());
