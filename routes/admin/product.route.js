@@ -24,4 +24,6 @@ router.post("/edit/change/:id", upload.single("thumbnail"),uploadCould.upload, c
 
 router.get("/detail/:id", controller.detail)
 
+// router.get("/", controller.category)
+
 module.exports = router
