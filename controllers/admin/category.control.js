@@ -7,20 +7,49 @@ module.exports.category = async (req, res) => {
         deleted: false
     }
 
+    const createTree = (arr, parent_id="") => (
+        arr 
+            .filter (item => item.parent_id === parent_id)
+            .map(item => ({
+                ...item,
+                children: createTree(arr, item.id)
+            }))
+    )
+
     const category = await Category.find(find)
-    console.log(category)
+    const newCategory = createTree(category)
+    // console.log(newCategory)
+    // console.log(category)
     res.render("admin/pages/category/index.pug", {
         pageTitle: "Danh mục sản phẩm",
-        category: category
+        category: newCategory
     }
     )
 }
 
 // Create category
-module.exports.create =(req, res) => {
+module.exports.create =async (req, res) => {
+    let find = {
+        deleted: false
+    }
 
+    const createTree = (arr, parent_id = "") => 
+        arr
+            .filter(item => item.parent_id === parent_id)
+            .map(item => ({ 
+                ...item, 
+                children: createTree(arr, item.id) 
+            }));
+    
+    const category = await Category.find(find)
+    const newCategory = createTree(category)
+    // newCategory.map(item => {
+    //     console.log(item._doc)
+    // })
+    // console.log(newCategory)
     res.render("admin/pages/category/create.pug", {
-        pageTitle: "Tạo danh mục sản phẩm"
+        pageTitle: "Tạo danh mục sản phẩm",
+        category: newCategory
     })
 }
 
@@ -35,7 +64,7 @@ module.exports.createCategory = async (req,res) => {
         req.body.position = parseInt(req.body.position)
     }
 
-    const record = new Category(req.body)
+    // const record = new Category(req.body)
     await record.save()
     res.redirect(`${systemConfig.prefixAdmin}/category`)
 }

@@ -1,0 +1,6 @@
+mixin categoryTree(category, level = 1)
+    each item in category 
+        - const prefix = Array(level + 1).join("-- ")
+        option(value = item._doc.id) #{prefix}#{item._doc.title}
+            if item.children && item.children.length > 0
+                +categoryTree(item.children, level + 1)
