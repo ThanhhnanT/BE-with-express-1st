@@ -7,7 +7,10 @@ const uploadCloud = require("../../middleware/admin/uploadCloud")
 
 
 router.get("/", controller.category) 
+
 router.get("/create", controller.create) 
 router.post("/create",upload.single("thumbnail"),uploadCloud.upload ,controller.createCategory) 
 
+router.get("/edit/:id", controller.edit) 
+router.post("/edit/:id",upload.single("thumbnail"),uploadCloud.upload, controller.patchEdit)
 module.exports = router

@@ -1,14 +1,19 @@
-const cloudinary = require('cloudinary').v2
-const streamifier = require('streamifier')
+const cloudinary = require("cloudinary").v2;
+const streamifier = require("streamifier");
 
-// Configuration
-cloudinary.config({ 
-    cloud_name: process.env.cloudName, 
-    api_key: process.env.cloudKey, 
-    api_secret: process.env.cloudSecret // Click 'View API Keys' above to copy your API secret
+// Cấu hình Cloudinary
+cloudinary.config({
+    cloud_name: process.env.cloudName,
+    api_key: process.env.cloudKey,
+    api_secret: process.env.cloudSecret
 });
 
-module.exports.upload =async (req, res, next) => {
+module.exports.upload = async (req, res, next) => {
+    // Kiểm tra nếu không có file thì bỏ qua upload
+    if (!req.file) {
+        return next(); // Không có ảnh, tiếp tục middleware tiếp theo
+    }
+
     let streamUpload = (req) => {
         return new Promise((resolve, reject) => {
             let stream = cloudinary.uploader.upload_stream(
@@ -27,11 +32,9 @@ module.exports.upload =async (req, res, next) => {
 
     async function upload(req) {
         let result = await streamUpload(req);
-        // console.log(result.secure_url);
-        req.body[req.file.fieldname] = result.secure_url
-
+        req.body[req.file.fieldname] = result.secure_url;
     }
 
     await upload(req);
-    next()
-}
+    next();
+};

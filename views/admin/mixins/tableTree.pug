@@ -1,4 +1,5 @@
 mixin tableTree(category, level = 1)
+        
         each item, index in category
             - const prefix = Array(level + 1).join("-- ")
             tr
@@ -26,7 +27,7 @@ mixin tableTree(category, level = 1)
                         name="position"
                     ) 
                 td 
-                    if(item.status == "active")
+                    if(item._doc.status == "active")
                         a(href="javascript:;" data-id=item._doc.id data-status="active" button-change-status class="badge badge-success") Hoạt động
                     else
                         a(href="javascript:;" data-id=item._doc.id data-status="non-active" button-change-status class="badge badge-danger") Dừng hoạt động
