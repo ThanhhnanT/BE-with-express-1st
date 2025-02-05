@@ -1,5 +1,5 @@
 extends ../../layouts/default.pug
-
+include ../../mixins/categoryTree.pug
 block content
     h1(class="mb-4") Thêm mới sản phẩm 
 
@@ -18,6 +18,16 @@ block content
                 name="title"
                 required
             )
+        div(class = "form-group")
+            label(for="product_category_id") Danh mục
+            select(
+                name="product_category_id"
+                id="product_category_id"
+                class="form-control"
+            )
+                option(value="") -- Chọn danh mục --
+                if (category)
+                    +categoryTree(category)
         div(class="form-group")
             label(for="desc") Mô tả
             textarea(

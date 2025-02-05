@@ -1,8 +1,9 @@
 extends ../../layouts/default.pug
+include ../../mixins/categoryTree.pug
 
 block content
     h1(class="mb-4") Chỉnh sửa sản phẩm 
-
+    //- h2 #{item}
     form(
         action = `${prefixAdmin}/product/edit/change/${item.id}`
         id="form-edit-product"
@@ -19,6 +20,16 @@ block content
                 value = item.title
                 required
             )
+        div(class = "form-group")
+            label(for="product_category_id") Danh mục
+            select(
+                name="product_category_id"
+                id="product_category_id"
+                class="form-control"
+            )
+                option(value="") -- Chọn danh mục --
+                if (category)
+                    +categoryTree(category,1, item.product_category_id)
         div(class="form-group")
             label(for="desc") Mô tả
             textarea(
@@ -26,7 +37,7 @@ block content
                 id="desc"
                 name="description"
                 rows="5" 
-            ) #{item.description}
+            ) !{item.description}
         div(class="form-group")
             label(for="price") Giá
             input(
