@@ -49,6 +49,7 @@ block content
                             if (role.permission.includes("product_edit"))
                                 th Trạng thái 
                             th Người tạo
+                            th Người chỉnh sửa gần nhất
                             th Hành động
                     tbody  
                         each item, index in product
@@ -86,6 +87,10 @@ block content
                                 td 
                                     p #{item.fullName}
                                     p #{moment(item.createBy.createdAt).format("DD/MM/YYYY HH:mm:ss")}
+                                td 
+                                    p #{item.userUpdate}
+                                    if (item.updatedBy)
+                                        p #{moment(item.updatedBy.updatedAt).format("DD/MM/YYYY HH:mm:ss")}
                                 td  
                                     a(href=`${prefixAdmin}/product/detail/${item.id}` class="btn btn-primary btn-sm") Chi tiết
                                     if (role.permission.includes("product_edit"))

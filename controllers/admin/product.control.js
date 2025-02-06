@@ -7,6 +7,7 @@ const systemConfig = require("../../config/system")
 const Category = require("../../model/category.model")
 const Account = require("../../model/account.model")
 
+// get Index
 module.exports.index = async (req, res) => {
     let find = {
         deleted: false,
@@ -21,7 +22,7 @@ module.exports.index = async (req, res) => {
     if (req.query.title) {
         find.title = objectSearch.regex
     }
-    
+
     // Pagination
     const countProduct = await Product.countDocuments(find)
     let objectPagination = await paginationHelper(
@@ -36,21 +37,35 @@ module.exports.index = async (req, res) => {
 
     // Sort
     let sort = {}
-    if (req.query.sortKey && req.query.sortValue){
+    if (req.query.sortKey && req.query.sortValue) {
         sort[req.query.sortKey] = req.query.sortValue
     } else {
         sort.position = "desc"
     }
     const products = await Product.find(find).limit(objectPagination.limitItem).skip(objectPagination.skip).sort(sort)
-    for (const item of products){
+    for (const item of products) {
+        // Thong tin nguoi tao
         const user = await Account.findOne(
             {
                 _id: item.createBy.account_id
             }
         )
-        if(user){
+        if (user) {
             item.fullName = user.fullName
         }
+
+        //Thong tin nguoi cap nhat gan nhat
+        const update = item.updatedBy[item.updatedBy.length - 1]
+        // console.log(update)
+        if (update) {
+            const userUpdate = await Account.findOne({
+                _id: update.account_id
+            })
+            if (userUpdate) {
+                item.userUpdate = userUpdate.fullName
+            }
+        }
+
     }
 
     res.render("admin/pages/product/index.pug", {
@@ -67,8 +82,12 @@ module.exports.changeStatus = async (req, res) => {
     // console.log(req.params)
     const status = req.params.status
     const id = req.params.id
+    const updated = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    }
     // console.log(status, id)
-    await Product.updateOne({ _id: id }, { status: status })
+    await Product.updateOne({ _id: id }, { status: status, $push: { updatedBy: updated } })
     res.redirect("back")
 }
 
@@ -168,7 +187,7 @@ module.exports.edit = async (req, res) => {
             item: editProduct,
             category: newCategory
         })
-    }catch(e){
+    } catch (e) {
         res.redirect(`${systemConfig.prefixAdmin}/product`)
     }
 }
@@ -184,17 +203,14 @@ module.exports.createPost = async (req, res) => {
     req.body.stock = parseInt(req.body.stock)
     if (req.body.position == "") {
         const count = await Product.countDocuments()
-        // console.log(count)
         req.body.position = count + 1
     }
     else {
         req.body.position = parseInt(req.body.position)
     }
-    // console.log(res.locals.user.id)
     req.body.createBy = {
         account_id: res.locals.user.id,
     }
-    // console.log(req.body)
 
     const product = new Product(req.body)
     await product.save()
@@ -202,24 +218,31 @@ module.exports.createPost = async (req, res) => {
 }
 
 // Edit product
-module.exports.changeEdit = async(req,res) => {
+module.exports.changeEdit = async (req, res) => {
+    const updated = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    }
     const id = req.params.id
-    await Product.updateOne({_id: id}, req.body)
+    await Product.updateOne({ _id: id }, {
+        ...req.body,
+        $push: { updatedBy: updated }
+    })
     res.redirect(`${systemConfig.prefixAdmin}/product`)
 }
 
 
 // Detail
 module.exports.detail = async (req, res) => {
-        const detailProduct = await Product.findOne(
-            {
-                deleted: false,
-                _id: req.params.id
-            }
-        )
-        res.render("admin/pages/product/detail", {
-            pageTitle: "Chi tiết sản phẩm: " + detailProduct.title,
-            item: detailProduct
-        })
+    const detailProduct = await Product.findOne(
+        {
+            deleted: false,
+            _id: req.params.id
+        }
+    )
+    res.render("admin/pages/product/detail", {
+        pageTitle: "Chi tiết sản phẩm: " + detailProduct.title,
+        item: detailProduct
+    })
 }
 

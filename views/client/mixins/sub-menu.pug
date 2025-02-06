@@ -1,0 +1,10 @@
+mixin sub-menu(category)
+    if category && Array.isArray(category)
+        ul 
+            each item in category
+                li 
+                    a(href=`/category/${item._doc.slug}`) #{item._doc.title}
+                    if item.children && Array.isArray(item.children) && item.children.length > 0
+                        +sub-menu(item.children)
+    else
+        p Không có danh mục nào

@@ -1,14 +1,18 @@
+include ../mixins/sub-menu.pug
+
 header.header 
     .container 
         .row.align-item-center 
             .col-3 
                 .inner-logo 
                     a(href="/")
-                        img(src="/images/logo.svg", alt="Logo")
+                        img(src="https://scontent.fhan15-1.fna.fbcdn.net/v/t39.30808-6/470608888_616018150752910_8622388274594149552_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=2285d6&_nc_ohc=3n4FqmiLlL8Q7kNvgErI6RA&_nc_oc=Adhda1b_Zsh1Ho0rjkc2BQu2lfzi9LvsLRPoydv8Tkm9bV6D8qU6sAjdm3b2Xd42m51XepTP9ILr1xF7T7A_zDq_&_nc_zt=23&_nc_ht=scontent.fhan15-1.fna&_nc_gid=Almdt59K9kmJkwNBBhVnR1f&oh=00_AYC82NmVU4QhRCJsadskzNiDX47sZP0t4Q7tP50d8WqM4Q&oe=67AA5E69", alt="Logo")
             .col-9 
                 .inner-menu 
                     ul 
                         li 
                             a(href="/") Trang chủ
-                        li 
-                            a(href="/product") Sản phẩm 
+                        li(class="sub-menu") 
+                            a(href="/product") Sản phẩm
+                            +sub-menu(category)
+                            
