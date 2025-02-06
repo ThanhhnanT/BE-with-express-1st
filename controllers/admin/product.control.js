@@ -5,18 +5,15 @@ const searchHelper = require("../../helpers/search")
 const paginationHelper = require("../../helpers/pagination")
 const systemConfig = require("../../config/system")
 const Category = require("../../model/category.model")
-
+const Account = require("../../model/account.model")
 
 module.exports.index = async (req, res) => {
-    // console.log(req)
     let find = {
         deleted: false,
     }
-    // console.log(searchHelper)
 
     // Bo loc
     const filterStatus = fliterStatusHelper(req);
-
     req.query.status ? (find.status = req.query.status) : ("")
 
     // search
@@ -24,7 +21,7 @@ module.exports.index = async (req, res) => {
     if (req.query.title) {
         find.title = objectSearch.regex
     }
-
+    
     // Pagination
     const countProduct = await Product.countDocuments(find)
     let objectPagination = await paginationHelper(
@@ -35,7 +32,6 @@ module.exports.index = async (req, res) => {
         },
         countProduct
     )
-    // console.log(countProduct)
     // End Pagination
 
     // Sort
@@ -45,12 +41,18 @@ module.exports.index = async (req, res) => {
     } else {
         sort.position = "desc"
     }
-    
-    
-    
-    // console.log(objectPagination)
     const products = await Product.find(find).limit(objectPagination.limitItem).skip(objectPagination.skip).sort(sort)
-    console.log(products)
+    for (const item of products){
+        const user = await Account.findOne(
+            {
+                _id: item.createBy.account_id
+            }
+        )
+        if(user){
+            item.fullName = user.fullName
+        }
+    }
+
     res.render("admin/pages/product/index.pug", {
         pageTitle: "Admin: Trang sản phẩm",
         product: products,
@@ -116,7 +118,9 @@ module.exports.delete = async (req, res) => {
     res.redirect("back")
 }
 
+// Get trang thêm sản phẩm
 module.exports.create = async (req, res) => {
+    // console.log(res.locals.user.id)
     let find = {
         deleted: false
     }
@@ -137,20 +141,18 @@ module.exports.create = async (req, res) => {
     })
 }
 
+// get edit page
 module.exports.edit = async (req, res) => {
     try {
-        // console.log(req.params)
         const editProduct = await Product.findOne(
             {
                 deleted: false,
                 _id: req.params._id
             }
         )
-
         let find = {
             deleted: false
         }
-    
         const createTree = (arr, parent_id = "") =>
             arr
                 .filter(item => item.parent_id === parent_id)
@@ -158,7 +160,6 @@ module.exports.edit = async (req, res) => {
                     ...item,
                     children: createTree(arr, item.id)
                 }));
-    
         const allCategory = await Category.find(find)
         const newCategory = createTree(allCategory)
         // console.log(editProduct)
@@ -174,7 +175,6 @@ module.exports.edit = async (req, res) => {
 
 //Create post
 module.exports.createPost = async (req, res) => {
-    // console.log(req.body)
     if (!req.body.title) {
         req.redirect("back")
         return
@@ -184,33 +184,26 @@ module.exports.createPost = async (req, res) => {
     req.body.stock = parseInt(req.body.stock)
     if (req.body.position == "") {
         const count = await Product.countDocuments()
-        console.log(count)
+        // console.log(count)
         req.body.position = count + 1
     }
     else {
         req.body.position = parseInt(req.body.position)
     }
-    // console.log(req.file, req.body)
-    // if (req.file) 
-    // req.body.deleted = false
-    const product = new Product(req.body)
-    // console.log(product)
-    await product.save()
+    // console.log(res.locals.user.id)
+    req.body.createBy = {
+        account_id: res.locals.user.id,
+    }
     // console.log(req.body)
+
+    const product = new Product(req.body)
+    await product.save()
     res.redirect(`${systemConfig.prefixAdmin}/product`)
 }
 
 // Edit product
 module.exports.changeEdit = async(req,res) => {
-    // res.send("Ok")
-    // console.log(req.query)
     const id = req.params.id
-    // console.log("_____________")
-    // console.log(req.file)
-    // if (req.file) 
-
-    // console.log(req.body)
-    // console.log(req.params)
     await Product.updateOne({_id: id}, req.body)
     res.redirect(`${systemConfig.prefixAdmin}/product`)
 }
@@ -218,19 +211,15 @@ module.exports.changeEdit = async(req,res) => {
 
 // Detail
 module.exports.detail = async (req, res) => {
-    
-        // console.log(req.params)
         const detailProduct = await Product.findOne(
             {
                 deleted: false,
                 _id: req.params.id
             }
         )
-        // console.log(detailProduct)
         res.render("admin/pages/product/detail", {
             pageTitle: "Chi tiết sản phẩm: " + detailProduct.title,
             item: detailProduct
         })
-    
 }
 

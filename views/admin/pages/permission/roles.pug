@@ -27,29 +27,8 @@ block content
                 each item in roles 
                     td(class="text-center") 
                         input(type="text" value=item.id)
-            tr 
-                td(colspan="4")
-                    b Danh mục sản phẩm 
-            tr(data-name="product-categor_view")
-                td Xem 
-                each item in roles 
-                    td(class="text-center")
-                        input(type="checkbox" value=item.id)
-            tr(data-name="product-categor_create")
-                td Thêm mới 
-                each item in roles 
-                    td(class="text-center")
-                        input(type="checkbox" value=item.id)
-            tr(data-name="product-categor_edit")
-                td Chỉnh sửa 
-                each item in roles 
-                    td(class="text-center")
-                        input(type="checkbox" value=item.id)
-            tr(data-name="product-categor_delete")
-                td Xóa 
-                each item in roles 
-                    td(class="text-center")
-                        input(type="checkbox" value=item.id)
+            
+            //- Product
             tr 
                 td(colspan="4")
                     b Sản phẩm 
@@ -73,6 +52,32 @@ block content
                 each item in roles 
                     td(class="text-center")
                         input(type="checkbox" value=item.id)
+
+            //- Danh mục
+            tr 
+                td(colspan="4")
+                    b Danh mục sản phẩm 
+            tr(data-name="product-categor_view")
+                td Xem 
+                each item in roles 
+                    td(class="text-center")
+                        input(type="checkbox" value=item.id)
+            tr(data-name="product-categor_create")
+                td Thêm mới 
+                each item in roles 
+                    td(class="text-center")
+                        input(type="checkbox" value=item.id)
+            tr(data-name="product-categor_edit")
+                td Chỉnh sửa 
+                each item in roles 
+                    td(class="text-center")
+                        input(type="checkbox" value=item.id)
+            tr(data-name="product-categor_delete")
+                td Xóa 
+                each item in roles 
+                    td(class="text-center")
+                        input(type="checkbox" value=item.id)
+            //- Role
             tr 
                 td(colspan="4")
                     b Nhóm quyền 
@@ -97,6 +102,40 @@ block content
                     td(class="text-center")
                         input(type="checkbox" value=item.id)
 
+            //- Phân quyền
+            tr 
+                td(colspan="4")
+                    b Phân quyền 
+            tr(data-name="permission_view")
+                td Phân quyền 
+                each item in roles 
+                    td(class="text-center")
+                        input(type="checkbox" value=item.id)
+
+            //- Account
+            tr 
+                td(colspan="4")
+                    b Tài khoản 
+            tr(data-name="account_view")
+                td Xem 
+                each item in roles 
+                    td(class="text-center")
+                        input(type="checkbox" value=item.id)
+            tr(data-name="account_create")
+                td Thêm mới 
+                each item in roles 
+                    td(class="text-center")
+                        input(type="checkbox" value=item.id)
+            tr(data-name="account_edit")
+                td Chỉnh sửa 
+                each item in roles 
+                    td(class="text-center")
+                        input(type="checkbox" value=item.id)
+            tr(data-name="account_delete")
+                td Xóa 
+                each item in roles 
+                    td(class="text-center")
+                        input(type="checkbox" value=item.id)    
     form(
         id="form-change-permission"
         enctype = "multipart/form-data"

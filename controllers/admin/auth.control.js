@@ -4,6 +4,9 @@ const systemConfig = require("../../config/system")
 
 module.exports.login = async (req,res) => {
     // res.send("oke")
+    if(req.cookies.token){
+        res.redirect(`${systemConfig.prefixAdmin}/dashboard`)
+    }
     res.render('admin/pages/auth/login', {
         pageTitle: "Trang đăng nhập"
     })
