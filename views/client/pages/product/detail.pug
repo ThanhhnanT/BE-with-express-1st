@@ -16,12 +16,30 @@ block content
                 src=item.thumbnail 
                 style="width: 400px"
             )
-        if(item.status)
-            div(class="mb-4")
-                span Trạng thái 
-                if(item.status === "active")
-                    span(class="badge badge-success") Hoạt động
-                else
-                    span(class="badge badge-danger") Dừng hoạt động
+    form(
+        action=`/cart/add/${item.id}`
+        method= 'POST'
+        enctype = "multipart/form-data"
+    )
+        input(
+            class="form-control mb-2"
+            type='number'
+            name='quantity'
+            value='1'
+            min='1'
+            max=item.stock
+        )
+        button(
+            type="submit"
+            class='btn btn-success btn-block'
+        ) Thêm vào giỏ hàng
+
+    if(item.status)
+        div(class="mb-4")
+            span Trạng thái 
+            if(item.status === "active")
+                span(class="badge badge-success") Hoạt động
+            else
+                span(class="badge badge-danger") Dừng hoạt động
     if(item.description)
-        p #{item.description}  
+        p !{item.description}  
