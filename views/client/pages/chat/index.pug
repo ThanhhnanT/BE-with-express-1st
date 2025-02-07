@@ -1,0 +1,34 @@
+extends ../../layout/default.pug
+include ../../mixins/box-head.pug 
+include ../../mixins/product-layout.pug 
+
+block content 
+    .section-products-featured.my-5 
+        .container 
+            .row 
+                .col-12 
+                    +box-head(`Chat`)
+            
+            .row 
+                .col-12 
+                    .chat 
+                        .inner-body 
+                            .inner-incoming     
+                                .inner-name Em yêu 
+                                .inner-content 
+                                    |    Anh ơi 
+                            .inner-outgoing 
+                                .inner-content 
+                                    |    Thế à
+                        .inner-foot 
+                            form(
+                                class='inner-form'
+                                action=''
+                            )
+                                input(
+                                    type='text'
+                                    palaceholder='Nhập nội dung'
+                                    name='content'
+                                ) 
+                                button 
+                                    i.fa-solid.fa-paper-plane 

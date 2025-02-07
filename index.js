@@ -11,6 +11,9 @@ const systemConfig = require("./config/system")
 const flash = express("express-flash")
 const bodyParser = require("body-parser")
 const database = require("./config/database")
+const { Server }= require("socket.io")
+const http = require('http')
+
 var methodOverride = require('method-override')
 database.connect()
 
@@ -31,7 +34,21 @@ app.set('views', `${__dirname}/views`)
 app.set('view engine', 'pug')
 app.use("/tinymce", express.static(path.join(__dirname, 'node_modules', 'tinymce')))
 
+// Socket.io
+const server = http.createServer(app)
+const io = new Server(server)
 
-app.listen(port, () => {
+io.on('connection', (socket) => {
+    console.log("a user", socket.id)
+})
+
+// end Socket.io
+
+app.get("*", (req, res) => {
+    res.render('client/pages/error/404',{
+        title: "404 Not Found"
+    })
+})
+server.listen(port, () => {
     console.log(`Example app listening on port ${process.env.MONGO_URL}`)
 })

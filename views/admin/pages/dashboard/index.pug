@@ -1,5 +1,49 @@
 extends ../../layouts/default.pug
 block content
     h1 Trang tổng quan
-    #{role}
-    #{user}
+    .row.mt-4 
+        .col-12 
+            .card.mb-4 
+                .card-header Thông tin tài khoản 
+                .card-body 
+                    if(user.avatar)
+                        img(
+                            src= user.avatar 
+                            style="height: 100px; margin-bottom:15px;"
+                        )
+                    if(user.fullName)
+                        p Họ tên: <b>#{user.fullName}</b>
+                    if(user.email)
+                        p Email: <b>#{user.email}</b>
+                    if(user.phone)
+                        p Số điện thoại <b>#{user.phone}</b>
+                    if(user.title)
+                        p Phân quyền: <b>#{role.title}</b>
+        .col-6 
+            .card.mb-4 
+                .card-header Danh mục sản phẩm 
+                .card-body 
+                    p Số lượng: <b> #{item.category.total}</b>
+                    p Hoạt động: <b> #{item.category.active}</b>
+                    p Dừng hoạt động: <b> #{item.category.nonActive}</b>
+        .col-6 
+            .card.mb-4 
+                .card-header Sản phẩm 
+                .card-body 
+                    p Số lượng: <b> #{item.product.total}</b>
+                    p Hoạt động: <b> #{item.product.active}</b>
+                    p Dừng hoạt động: <b> #{item.product.nonActive}</b>
+        .col-6 
+            .card.mb-4 
+                .card-header Tài khoản admin 
+                .card-body 
+                    p Số lượng: <b> #{item.account.total}</b>
+                    p Hoạt động: <b> #{item.account.active}</b>
+                    p Dừng hoạt động: <b> #{item.account.nonActive}</b>
+        .col-6 
+            .card.mb-4 
+                .card-header Tài khoản client 
+                .card-body 
+                    p Số lượng: <b> #{item.user.total}</b>
+                    p Hoạt động: <b> #{item.user.active}</b>
+                    p Dừng hoạt động: <b> #{item.user.nonActive}</b>

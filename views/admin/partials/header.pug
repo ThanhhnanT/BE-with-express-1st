@@ -4,10 +4,13 @@ header.header
             .col-3 
                 .inner-logo 
                     a(href="/admin/dashboard") ADMIN
-            .col-9 
+            .col-7
+                if(user) 
+                    div(class='text-right') #{user.fullName}
+            .col-2
                 div(class="text-right")
-                    a(
-                        href=`${prefixAdmin}/auth/logout`
-                        class="btn btn-danger btn-sm"
-                    ) Đăng xuất
+                        a(
+                            href=`${prefixAdmin}/auth/logout`
+                            class="btn btn-danger btn-sm"
+                        ) Đăng xuất
                 

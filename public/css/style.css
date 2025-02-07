@@ -82,3 +82,62 @@ ul{
 .sub-menu ul li:hover > ul {
     display: block;
 }
+
+
+/* // Chat */
+.inner-incoming .inner-content{
+    text-align: right;
+    padding: 5px 10px;
+    border-radius: 15px;
+    background-color: #ddd;
+    display: inline-block;
+    color: #000;
+    margin-bottom:10px;
+}
+.inner-body{
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.inner-outgoing{
+    position: relative;
+    display: flex;
+    justify-content: right;
+}
+.inner-outgoing .inner-content{
+    text-align: right;
+    padding: 5px 10px;
+    border-radius: 15px;
+    background-color: #FE5DA3;
+    display: inline-block;
+    color: #fff;
+    margin-bottom:10px;
+}
+
+.chat .inner-form{
+    display: flex;
+    align-items: center;
+}
+
+.chat .inner-form input{
+    flex: 1;
+    height: 32px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 0 10px;
+    outline: none;
+}
+
+
+.chat .inner-form button{
+    border-radius: 15px;
+    border: 1px solid #FE5DA3;
+    background-color: #FE5DA3;
+    color: #fff;
+    height: 32px;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+/* //End Chat */
