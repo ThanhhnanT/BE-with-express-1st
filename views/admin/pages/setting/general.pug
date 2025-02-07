@@ -1,0 +1,76 @@
+extends ../../layouts/default.pug
+block content
+    h1 Cài đặt chung 
+
+    form(
+        action = `${prefixAdmin}/setting/general`
+        method="POST"
+        enctype="multipart/form-data"        
+    )
+        if(setting)
+            div(class='form-group')
+                label(for='websiteName') Tên Website 
+                input(
+                    type='text'
+                    class='form-control'
+                    id='websiteName'
+                    name='websiteName'
+                    value = setting.websiteName 
+                )
+            div(class='form-group' upload-image)
+                label(for='logo') Logo 
+                br 
+                input(
+                    type='file'
+                    accept='image/*'
+                    id='logo'
+                    name='logo'
+                    upload-image-input
+                )
+                br
+                img(
+                    src=setting.logo
+                    class='image-preview'
+                    upload-image-preview
+                )
+            div(class='form-group')
+                label(for='phone') Số điện thoại  
+                input(
+                    type='text'
+                    class='form-control'
+                    id='phone'
+                    name='phone'
+                    value = setting.phone
+                )
+            div(class='form-group')
+                label(for='email') Email
+                input(
+                    type='email'
+                    class='form-control'
+                    id='email'
+                    name='email'
+                    value=setting.email 
+                ) 
+            div(class='form-group')
+                label(for='address') Địa chỉ
+                input(
+                    type='text'
+                    class='form-control'
+                    id='address'
+                    name='address'
+                    value=setting.address
+                ) 
+            div(class='form-group')
+                label(for='copyRight') copyRight 
+                input(
+                    type='text'
+                    class='form-control'
+                    id='copyRight'
+                    name='copyRight'
+                    value=setting.copyRight 
+                ) 
+            div(class='form-group')
+                button(
+                    type='submit'
+                    class='btn btn-primary'
+                )   Cập nhật 

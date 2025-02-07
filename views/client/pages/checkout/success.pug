@@ -1,0 +1,62 @@
+extends ../../layout/default.pug
+include ../../mixins/box-head.pug 
+include ../../mixins/product-layout.pug 
+
+block content 
+    .container.my-3 
+        .row
+            .col-12 
+                +box-head("Đặt hàng thành công")
+
+        .row    
+            .col-12 
+                div(class="alert alert-success")
+                    p Chúc mừng bạn đã đặt hàng thành công! Chúng tôi sẽ xử lý đơn hàng trong thời gian ngắn nhất 
+        if(order)
+            .row 
+                .col-12 
+                    h4(class="mb-2") Thông tin cá nhân 
+                    table(class="table table-bordered") 
+                        tbody 
+                            tr 
+                                td Họ tên 
+                                td  
+                                    b #{order.user_infor.fullName} 
+                            tr 
+                                td Số điện thoại 
+                                td 
+                                    b #{order.user_infor.phone}
+                            tr 
+                                td Địa chỉ 
+                                td 
+                                    b #{order.user_infor.address}
+            .row 
+                .col-12 
+                    h4(class="mb-2") Thông tin đơn hàng 
+                    table(class= "table table bordered")
+                        thead 
+                            tr 
+                                th STT 
+                                th Ảnh
+                                th Tên sản phẩm
+                                th Giá
+                                th Số lượng
+                                th Tổng tiền 
+                        tbody 
+                            if(order.product.length > 0)
+                                each item, index in order.product 
+                                    tr 
+                                            td #{index + 1}
+                                     
+                                            td 
+                                                img(
+                                                src=item.productInfor.thumbnail
+                                                alt = item.productInfor.title
+                                                width ="80px"
+                                                )
+                                            td #{item.productInfor.title}
+                                            td #{item.price * (100 -  item.discountPercentage)/100}
+                                            td #{item.quantity}
+                                            td #{item.totalPrice}
+                    if(order.product.length > 0)
+                        h3(class="text-right") Tổng đơn hàng: #{order.totalPrice}
