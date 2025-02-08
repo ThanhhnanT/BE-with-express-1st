@@ -16,6 +16,14 @@ module.exports.chat = async (req, res) => {
                 }
             )
             await chat.save()
+
+            // Trả data về client
+            data= {
+                userId: userId,
+                fullName: res.locals.user.fullName,
+                content: content
+            }
+            _io.emit("SERVER_RETURN_MESSAGE", (data))
         })
     })
     //End SocketIo
