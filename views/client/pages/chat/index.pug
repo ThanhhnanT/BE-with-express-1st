@@ -3,6 +3,7 @@ include ../../mixins/box-head.pug
 include ../../mixins/product-layout.pug 
 
 block content 
+    //- #{chat}
     .section-products-featured.my-5 
         .container 
             .row 
@@ -13,13 +14,15 @@ block content
                 .col-12 
                     .chat 
                         .inner-body 
-                            .inner-incoming     
-                                .inner-name Em yêu 
-                                .inner-content 
-                                    |    Anh ơi 
-                            .inner-outgoing 
-                                .inner-content 
-                                    |    Thế à
+                            each item in chat
+                                div(class=(item.user_id === user.id ? "inner-outgoing" : "inner-incoming" )) 
+                                    if(item.user_id !== user.id)
+                                        .inner-name #{item.userName} 
+                                    .inner-content 
+                                        | #{item.content}
+                                //- .inner-outgoing 
+                                //-     .inner-content 
+                                //-         |    Thế à
                         .inner-foot 
                             form(
                                 class='inner-form'

@@ -23,5 +23,5 @@ module.exports = (app) => {
     app.use('/product' ,productRoute)
     app.use('/checkout' ,checkoutRoute)
     app.use('/user' ,userRoute)
-    app.use('/chat' ,chatRoute)
+    app.use('/chat', chatRoute)
 }
