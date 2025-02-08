@@ -24,6 +24,16 @@ module.exports.chat = async (req, res) => {
                 content: content
             }
             _io.emit("SERVER_RETURN_MESSAGE", (data))
+        });
+
+        socket.on("CLIENT_SEND_TYPING", async (type) => {
+            // Trả data về client
+            data= {
+                userId: userId,
+                fullName: res.locals.user.fullName,
+                type: type
+            }
+            socket.broadcast.emit("SERVER_RETURN_TYPING", data)
         })
     })
     //End SocketIo
