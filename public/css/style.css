@@ -86,7 +86,6 @@ ul{
 
 /* // Chat */
 .inner-incoming .inner-content{
-    text-align: right;
     padding: 5px 10px;
     border-radius: 15px;
     background-color: #ddd;
@@ -211,3 +210,47 @@ ul{
     }
 }
 /* end box typing */
+
+
+/* image  */
+.chat .inner-image img{
+    width: 20%;
+    object-fit: contain;
+    background-color: #efefef;
+    border-radius: 5px;
+}
+
+.chat .inner-outgoing .inner-image{
+    /* margin-left: auto; */
+    text-align: right !important;
+}
+.chat .inner-incoming .inner-image{
+    /* margin-left: auto; */
+    text-align: left !important;
+}
+
+/* end image  */
+
+
+.chat .inner-preview-image {
+    position: relative;
+}
+
+.chat .inner-preview-image .label-container {
+    display: none;
+}
+
+.chat .inner-preview-image .input-container{
+    display: none;
+}
+
+.chat .inner-preview-image .image-preview{
+    height: auto;
+    padding: 0;
+    border-radius: 0;
+}
+
+.chat .inner-preview-image .image-preview-item{
+    width: 90px;
+    background-size: contain;
+}

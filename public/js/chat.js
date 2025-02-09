@@ -1,6 +1,16 @@
 import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js'
+import * as FileUploadWithPreview from "https://unpkg.com/file-upload-with-preview/dist/index.js"
 // import { socket } from "./socket.js";
 // CLIENT_SEND_MESSAGE
+
+// Upload image
+const upload = new FileUploadWithPreview.FileUploadWithPreview('my-unique-id',{
+    multiple: true,
+    maxFileCount: 6
+});
+
+
+// end Upload image
 const socket = io();
 const formSendData = document.querySelector(".chat .inner-form")
 if (formSendData) {
@@ -9,10 +19,15 @@ if (formSendData) {
     formSendData.addEventListener("submit", (e) => {
         e.preventDefault()
         const content = e.target[0].value
-        // console.log(content) 
-        if (content) {
-            socket.emit("CLIENT_SEND_MESSAGE", content)
+        const image = upload.cachedFileArray || []
+        // console.log(image)
+        if (content || image.length > 0) {
+            socket.emit("CLIENT_SEND_MESSAGE", {
+                content: content,
+                image: image
+            })
             e.target[0].value = ''
+            upload.resetPreviewPanel()
             socket.emit("CLIENT_SEND_TYPING", "hidden");
         }
     })
@@ -24,18 +39,36 @@ const typing = document.querySelector(".chat .inner-list-typing")
 
 
 // SERVER_RETURN_MESSAGE
-socket.on("SERVER_RETURN_MESSAGE", (data) => {
+socket.on("SERVER_RETURN_MESSAGE", (datas) => {
     // console.log(data)
     const body = document.querySelector(".chat .inner-body")
     const id = document.querySelector("[my-id]").getAttribute("my-id")
     // console.log(id, data.user_id)
     const div = document.createElement("div")
-    div.classList.add(id === data.userId ? "inner-outgoing" : "inner-incoming")
-    let nameHTML = id === data.userId ? "" : `<div class='inner-name'> ${data.fullName} </div>`;
-    div.innerHTML = `
-            ${nameHTML}
-            <div class='inner-content'> ${data.content} </div>
+    div.classList.add(id === datas.userId ? "inner-outgoing" : "inner-incoming")
+    let nameHTML = id === datas.userId ? "" : `<div class='inner-name'> ${datas.fullName} </div>`;
+    let contentHTML = ""
+    let imageHTML = ""
+    if (datas.data.content){
+        contentHTML = `
+            <div class='inner-content'> ${datas.data.content} </div>
         `
+    }
+    if (datas.data.image){
+
+        imageHTML +=` <div class="inner-image"> `
+        for (const item of datas.img) {
+            imageHTML += `<img src="${item}"/>`
+        }
+        imageHTML += `</div>`
+    }
+    console.log(imageHTML)
+    div.innerHTML = `
+        ${nameHTML}
+        ${contentHTML}
+        <br></br>
+        ${imageHTML}
+    `
     body.insertBefore(div, typing)
     if (body) {
         body.scrollTop = body.scrollHeight
@@ -138,3 +171,7 @@ if (typing) {
 }
 
 // END SERVER_RETURN_TYPING
+
+// Ấn vào icon để up ảnh
+
+// end Ấn vào icon để up ảnh

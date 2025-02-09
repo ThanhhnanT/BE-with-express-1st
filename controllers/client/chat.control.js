@@ -1,41 +1,10 @@
 const Chat = require("../../model/chat.model")
 const User = require("../../model/user.model")
-
+const uploadToCloud = require("../../helpers/uploadToCloud")
+const Socket = require("../../socket/client/chat.socket")
 module.exports.chat = async (req, res) => {
-    const userId = res.locals.user.id 
-
     //SocketIo
-    _io.once('connection', (socket) => {
-        console.log("a user", socket.id)
-        socket.on("CLIENT_SEND_MESSAGE", async (content) => {
-            // Lưu cào data base
-            const chat = new Chat(
-                {
-                    user_id: userId,
-                    content: content
-                }
-            )
-            await chat.save()
-
-            // Trả data về client
-            data= {
-                userId: userId,
-                fullName: res.locals.user.fullName,
-                content: content
-            }
-            _io.emit("SERVER_RETURN_MESSAGE", (data))
-        });
-
-        socket.on("CLIENT_SEND_TYPING", async (type) => {
-            // Trả data về client
-            data= {
-                userId: userId,
-                fullName: res.locals.user.fullName,
-                type: type
-            }
-            socket.broadcast.emit("SERVER_RETURN_TYPING", data)
-        })
-    })
+        Socket(res)
     //End SocketIo
 
     // Lấy data chat

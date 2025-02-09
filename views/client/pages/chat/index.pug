@@ -18,25 +18,18 @@ block content
                                 div(class=(item.user_id === user.id ? "inner-outgoing" : "inner-incoming" )) 
                                     if(item.user_id !== user.id)
                                         .inner-name #{item.userName} 
-                                    .inner-content 
-                                        | #{item.content}
+                                    if item.content
+                                        .inner-content 
+                                            | #{item.content}
+                                    if item.image
+                                        .inner-image 
+                                            each i in item.image 
+                                                img(src=i)
                             div(class='inner-list-typing')
-                            //-     div(class='box-typing')
-                            //-         div(class='inner-name') VVT 
-                            //-         div(class='inner-dots')
-                            //-             span 
-                            //-             span 
-                            //-             span 
-                            //-     div(class='box-typing')
-                            //-         div(class='inner-name') HPT 
-                            //-         div(class='inner-dots')
-                            //-             span 
-                            //-             span 
-                            //-             span 
-                                    
-                                //- .inner-outgoing 
-                                //-     .inner-content 
-                                //-         |    Thế à
+
+                        .inner-preview-image 
+                            div(class="custom-file-container" data-upload-id="my-unique-id") 
+
                         .inner-foot 
                             form(
                                 class='inner-form'
@@ -47,8 +40,10 @@ block content
                                     palaceholder='Nhập nội dung'
                                     name='content'
                                 )
+                                label(for="file-upload-with-preview-my-unique-id" class='btn btn-primary mx-2 mb-0') <i class="fa-solid fa-image"></i>
                                 span(class='btn btn-primary mx-2 button-icon') <i class="fa-solid fa-face-smile"></i>
                                 button 
                                     i.fa-solid.fa-paper-plane 
+   
     div(class='tooltip' role='tooltip')
         emoji-picker
