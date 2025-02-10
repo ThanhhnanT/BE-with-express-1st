@@ -1,6 +1,6 @@
 const User = require("../../model/user.model")
-const Forgot= require("../../model/forgotPassword.model")
-const random= require("../../helpers/generate")
+const Forgot = require("../../model/forgotPassword.model")
+const random = require("../../helpers/generate")
 const md5 = require('md5')
 const sendMail = require("../../helpers/sendEmail")
 const addFriend = require("../../socket/client/user.socket")
@@ -56,11 +56,33 @@ module.exports.postLogin = async (req, res) => {
     }
 
     res.cookie("token", user.token)
+    await User.updateOne(
+        {
+            _id: user.id
+        },
+        {
+            statusOnline: "online"
+        }
+    )
+
+    _io.once("connection", (socket) => {
+        console.log("a user login")
+        socket.broadcast.emit("SERVER_RETURN_LOGIN", user.id)
+
+    })
     res.redirect("/")
 }
 
-module.exports.logout = (req, res) => {
+module.exports.logout = async (req, res) => {
     res.clearCookie("token")
+    await User.updateOne(
+        {
+            _id: res.locals.user.id
+        },
+        {
+            statusOnline: "offline"
+        }
+    )
     res.redirect("/")
 }
 
@@ -96,10 +118,10 @@ module.exports.postForgotPassword = async (req, res) => {
 
     // Send Gmail 
     const subject = "Mã OTP xác minh mật khẩu"
-    const html =`
+    const html = `
         Mã OTP của bạn là: <b>${objectForgot.otp}</b>
     `
-    sendMail.sendMail(email, subject , html )
+    sendMail.sendMail(email, subject, html)
     res.redirect(`/user/password/otp?email=${email}`)
 }
 
@@ -109,7 +131,7 @@ module.exports.otpPassword = async (req, res) => {
         title: "Nhập OTP",
         email: email
     })
-} 
+}
 
 module.exports.postOtpPassword = async (req, res) => {
     const email = req.body.email
@@ -121,9 +143,9 @@ module.exports.postOtpPassword = async (req, res) => {
             otp: otp
         }
     )
-    if (!result){
+    if (!result) {
         console.log("otp ko hop le")
-        return 
+        return
     }
 
     const user = await User.findOne(
@@ -137,7 +159,7 @@ module.exports.postOtpPassword = async (req, res) => {
 
     res.redirect(`/user/password/reset`)
 
-} 
+}
 
 module.exports.resetPassword = async (req, res) => {
     res.render("client/pages/user/resetPassword", {
@@ -147,9 +169,9 @@ module.exports.resetPassword = async (req, res) => {
 
 module.exports.postResetPassword = async (req, res) => {
     const pass = req.body.password
-    const confirmPass= req.body.confirmPassword
+    const confirmPass = req.body.confirmPassword
     // console.log(pass, confirmPass)
-    if (pass !== confirmPass){
+    if (pass !== confirmPass) {
         console.log("Mật khẩu không trùng khớp")
         return
     }
@@ -176,12 +198,12 @@ module.exports.notFriend = async (req, res) => {
     const userId = res.locals.user.id
     // console.log(res.locals.user)
     const friendLists = []
-    for (const item of res.locals.user.friendList){
+    for (const item of res.locals.user.friendList) {
         friendLists.push(item.user_id)
     }
-    
+
     const user = await User.find({
-        _id: {$nin: [userId, ...res.locals.user.requestFriend, ...res.locals.user.acceptFriend, ...friendLists]},
+        _id: { $nin: [userId, ...res.locals.user.requestFriend, ...res.locals.user.acceptFriend, ...friendLists] },
         deleted: false,
         status: "active"
     }).select("avatar fullName")
@@ -196,13 +218,13 @@ module.exports.notFriend = async (req, res) => {
 module.exports.request = async (req, res) => {
     const user = await User.find(
         {
-            _id: {$in: [...res.locals.user.requestFriend]}
+            _id: { $in: [...res.locals.user.requestFriend] }
         }
     ).select("fullName id avatar")
 
     addFriend(res)
     // console.log(res.locals.user)
-    res.render("client/pages/friend/request",{
+    res.render("client/pages/friend/request", {
         title: "Lời mời đã gửi",
         users: user
     })
@@ -211,31 +233,37 @@ module.exports.request = async (req, res) => {
 module.exports.accept = async (req, res) => {
     const user = await User.find(
         {
-            _id: {$in: [...res.locals.user.acceptFriend]}
+            _id: { $in: [...res.locals.user.acceptFriend] }
         }
     ).select("fullName id avatar")
 
     addFriend(res)
     // console.log(user)
-    res.render("client/pages/friend/accept",{
+    res.render("client/pages/friend/accept", {
         title: "Lời mời kết bạn",
         users: user
     })
 }
 
-module.exports.friend = async (req, res )=> {
+module.exports.friend = async (req, res) => {
     const friendLists = []
-    for (const item of res.locals.user.friendList){
+    for (const item of res.locals.user.friendList) {
         friendLists.push(item.user_id)
     }
 
     const friend = await User.find(
         {
-            _id: {$in: friendLists}
+            _id: { $in: friendLists }
         }
-    )
-
+    ).select("fullName avatar id statusOnline")
+    // console.log(res.locals.user)
+    for (const user of friend){
+        const zoomChat = res.locals.user.friendList.find(item => item.user_id == user.id)
+        // console.log(zoomChat)
+        user.room_chat_id = zoomChat.room_chat_id
+    }
     addFriend(res)
+    // console.log(friend)
 
     res.render("client/pages/friend/friend.pug", {
         title: "Danh sách bạn bè",

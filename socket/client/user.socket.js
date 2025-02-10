@@ -1,6 +1,7 @@
 // const Chat = require("../../model/chat.model")
 // const uploadToCloud = require("../../helpers/uploadToCloud")
 const User = require("../../model/user.model")
+const zoomChat = require("../../model/zooms-chat.model")
 
 module.exports = async (res) => {
     const idA = res.locals.user.id
@@ -163,13 +164,45 @@ module.exports = async (res) => {
         // Người dùng đồng ý kết bạn
         socket.on("CLIENT_ACCEPT_FRIEND", async (idB) => {
             console.log("CLIENT_ACCEPT_FRIEND")
-            // Xóa id của A trong requestFriend của B, thêm id của A vào friendList của B
+            
+            // Lấy ra xem user có tồn tại không
             const existUserA = await User.findOne(
                 {
                     _id: idB,
                     requestFriend: idA
                 }
             )
+            
+            const existUserB = await User.findOne(
+                {
+                    _id: idA,
+                    acceptFriend: idB
+                }
+            )
+            //Tạo phòng chat chung
+            
+            let zoom 
+            if(existUserA && existUserB){
+                zoom = new zoomChat(
+                    {
+                        typeRoom: "friend",   
+                        users:[
+                            {
+                                user_id: idA,
+                                role: 'superAdmin',    
+                            },
+                            {
+                                user_id: idB,
+                                role: 'superAdmin',
+                            },
+                        ],    
+                    }
+                )
+                await zoom.save()
+            }
+            
+            // Xóa id của A trong requestFriend của B, thêm id của A vào friendList của B
+            // console.log(zoom.id)
             if (existUserA) {
                 await User.updateOne(
                     {
@@ -179,8 +212,9 @@ module.exports = async (res) => {
                         $pull: { requestFriend: idA },
                         $push: {
                             friendList: {
+                                room_chat_id: zoom.id,
                                 user_id: idA,
-                                zoom_chat_id: ""
+                                
                             }
                         }
                     }
@@ -188,12 +222,7 @@ module.exports = async (res) => {
             }
 
             // Xóa id của B trong acceptFriend của A, thêm id của B vào friendList của A
-            const existUserB = await User.findOne(
-                {
-                    _id: idA,
-                    acceptFriend: idB
-                }
-            )
+            
             if (existUserB) {
                 await User.updateOne(
                     {
@@ -203,13 +232,15 @@ module.exports = async (res) => {
                         $pull: { acceptFriend: idB },
                         $push: {
                             friendList: {
+                                room_chat_id: zoom.id,
                                 user_id: idB,
-                                zoom_chat_id: ""
+                                
                             }
                         }
                     }
                 )
             }
+            
         })
 
         // Người dùng hủy kết bạn

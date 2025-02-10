@@ -4,11 +4,13 @@ const uploadToCloud = require("../../helpers/uploadToCloud")
 const Socket = require("../../socket/client/chat.socket")
 module.exports.chat = async (req, res) => {
     //SocketIo
-        Socket(res)
+        Socket(res, req)
     //End SocketIo
-
+    const roomId = req.params.roomId
+    // console.log(roomId)
     // Lấy data chat
     const chats = await Chat.find({
+        room_chat_id: roomId,
         deleted: false
     })
     for (const item of chats){

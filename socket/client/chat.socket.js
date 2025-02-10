@@ -1,13 +1,16 @@
 const Chat = require("../../model/chat.model")
 const uploadToCloud = require("../../helpers/uploadToCloud")
 
-module.exports = async (res) => {
+module.exports = async (res, req) => {
     const userId = res.locals.user.id
     _io.once('connection', (socket) => {
         console.log("a user", socket.id)
+
+        socket.join(req.params.roomId)
         socket.on("CLIENT_SEND_MESSAGE", async (data) => {
             const image = []
-
+            const roomId = req.params.roomId
+            // console.log(roomId)
             for (const item of data.image) {
                 const link = await uploadToCloud(item)
                 image.push(link)
@@ -18,6 +21,7 @@ module.exports = async (res) => {
             const chat = new Chat(
                 {
                     user_id: userId,
+                    room_chat_id: roomId,
                     content: data.content,
                     image: image
                 }
@@ -32,7 +36,7 @@ module.exports = async (res) => {
                 img: image
             }
             // console.log(data)
-            _io.emit("SERVER_RETURN_MESSAGE", (data))
+            _io.to(roomId).emit("SERVER_RETURN_MESSAGE", (data))
         });
 
         socket.on("CLIENT_SEND_TYPING", async (type) => {
@@ -42,7 +46,7 @@ module.exports = async (res) => {
                 fullName: res.locals.user.fullName,
                 type: type
             }
-            socket.broadcast.emit("SERVER_RETURN_TYPING", data)
+            socket.broadcast.to(req.params.roomId).emit("SERVER_RETURN_TYPING", data)
         })
     })
 }
