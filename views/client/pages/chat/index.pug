@@ -6,6 +6,7 @@ block content
     //- #{chat}
     .section-products-featured.my-5 
         .container 
+            include ../../partials/buttonUser.pug
             .row 
                 .col-12 
                     +box-head(`Chat`)
@@ -47,3 +48,6 @@ block content
    
     div(class='tooltip' role='tooltip')
         emoji-picker
+
+block script 
+    <script type='module' src='/js/chat.js'></script>

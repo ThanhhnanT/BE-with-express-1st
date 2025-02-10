@@ -1,0 +1,24 @@
+.row 
+    .col-12 
+        a(
+            class='btn btn-primary m-1'
+            href='/user/not-friend'
+        ) Danh sách người dùng 
+        a(
+            class='btn btn-primary m-1'
+            href='/user/friend'
+        ) Danh sách bạn bè 
+        a(
+            class='btn btn-primary m-1'
+            href='/user/request'
+        ) Lời mời đã gửi
+        a(
+            class='btn btn-primary m-1'
+            href='/user/accept'
+        ) 
+            | Lời mời kết bạn
+            span(
+                class='badge badge-light'
+                badge-user-accept=user.id
+            ) #{user.acceptFriend.length}
+                    

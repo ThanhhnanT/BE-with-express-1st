@@ -17,4 +17,11 @@ router.post("/password/forgot", upload.none(),controller.postForgotPassword)
 router.post("/login", upload.none(), controller.postLogin)
 router.post("/register", upload.none(),controller.postRegister)
 
+
+// Bạn bè
+router.get("/not-friend", controller.notFriend)
+router.get("/request", controller.request)
+router.get("/accept", controller.accept)
+router.get("/friend", controller.friend)
+
 module.exports = router

@@ -11,6 +11,7 @@ module.exports.user=  async (req, res, next) => {
         // console.log(user)
         if(user){
             res.locals.user = user
+            // console.log(user)
         }
     }
     next()

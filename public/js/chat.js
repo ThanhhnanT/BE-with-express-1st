@@ -1,6 +1,8 @@
 import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js'
 import * as FileUploadWithPreview from "https://unpkg.com/file-upload-with-preview/dist/index.js"
-// import { socket } from "./socket.js";
+
+
+
 // CLIENT_SEND_MESSAGE
 
 // Upload image
@@ -172,6 +174,5 @@ if (typing) {
 
 // END SERVER_RETURN_TYPING
 
-// Ấn vào icon để up ảnh
 
-// end Ấn vào icon để up ảnh
+// end Ấn vào để show ảnh

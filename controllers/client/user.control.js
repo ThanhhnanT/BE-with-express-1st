@@ -3,6 +3,9 @@ const Forgot= require("../../model/forgotPassword.model")
 const random= require("../../helpers/generate")
 const md5 = require('md5')
 const sendMail = require("../../helpers/sendEmail")
+const addFriend = require("../../socket/client/user.socket")
+
+
 module.exports.register = async (req, res) => {
     res.render("client/pages/user/register", {
         title: "Đăng ký"
@@ -164,4 +167,78 @@ module.exports.postResetPassword = async (req, res) => {
         }
     )
     res.redirect("/")
+}
+
+
+
+// Kết bạn
+module.exports.notFriend = async (req, res) => {
+    const userId = res.locals.user.id
+    // console.log(res.locals.user)
+    const friendLists = []
+    for (const item of res.locals.user.friendList){
+        friendLists.push(item.user_id)
+    }
+    
+    const user = await User.find({
+        _id: {$nin: [userId, ...res.locals.user.requestFriend, ...res.locals.user.acceptFriend, ...friendLists]},
+        deleted: false,
+        status: "active"
+    }).select("avatar fullName")
+
+    addFriend(res)
+    res.render("client/pages/friend/notFriend.pug", {
+        title: "Danh sách người dùng",
+        users: user
+    })
+}
+
+module.exports.request = async (req, res) => {
+    const user = await User.find(
+        {
+            _id: {$in: [...res.locals.user.requestFriend]}
+        }
+    ).select("fullName id avatar")
+
+    addFriend(res)
+    // console.log(res.locals.user)
+    res.render("client/pages/friend/request",{
+        title: "Lời mời đã gửi",
+        users: user
+    })
+}
+
+module.exports.accept = async (req, res) => {
+    const user = await User.find(
+        {
+            _id: {$in: [...res.locals.user.acceptFriend]}
+        }
+    ).select("fullName id avatar")
+
+    addFriend(res)
+    // console.log(user)
+    res.render("client/pages/friend/accept",{
+        title: "Lời mời kết bạn",
+        users: user
+    })
+}
+
+module.exports.friend = async (req, res )=> {
+    const friendLists = []
+    for (const item of res.locals.user.friendList){
+        friendLists.push(item.user_id)
+    }
+
+    const friend = await User.find(
+        {
+            _id: {$in: friendLists}
+        }
+    )
+
+    addFriend(res)
+
+    res.render("client/pages/friend/friend.pug", {
+        title: "Danh sách bạn bè",
+        users: friend
+    })
 }
